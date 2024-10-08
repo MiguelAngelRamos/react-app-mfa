@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
 
 const MFAVerificationForm = () => {
-  const { token } = useAuth();
+  const { token, setToken } = useAuth();
   const [mfaCode, setMfaCode] = useState('');
   const navigate = useNavigate();
 
@@ -26,7 +26,8 @@ const MFAVerificationForm = () => {
 
       // Verificar la respuesta
       console.log('API Response:', response.data);
-
+      setToken(response.data.access_token); // Guardar token en el contexto
+      localStorage.setItem('token', response.data.access_token); // Guardar token en LocalStorage
       // Si la verificación MFA es exitosa, redirigimos al perfil
       if (response.data.access_token) {
         console.log('MFA verification successful');
