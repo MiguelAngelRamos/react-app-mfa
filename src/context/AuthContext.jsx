@@ -1,20 +1,21 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import Cookies from 'js-cookie';  // Importamos la librería de cookies
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  // Inicializa el token con el valor de localStorage si existe
-  const [token, setToken] = useState(() => localStorage.getItem('token'));
+  // Inicializa el token desde las cookies
+  const [token, setToken] = useState(() => Cookies.get('token'));
 
-  // Cada vez que cambie el token, actualiza localStorage
+  // Cada vez que cambie el token, actualiza las cookies
   useEffect(() => {
     if (token) {
-      console.log('token', token);
-      localStorage.setItem('token', token);
+      // Establecemos la cookie con una expiración de 1 día
+      Cookies.set('token', token, { expires: 1, secure: true });  // Secure lo asegura en HTTPS
     } else {
-      localStorage.removeItem('token');
+      Cookies.remove('token');
     }
   }, [token]);
 

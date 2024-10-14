@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
+import { verifyMFA } from '../services/api';
 
 const MFAVerificationForm = () => {
   const { token, setToken } = useAuth();
@@ -18,11 +19,7 @@ const MFAVerificationForm = () => {
 
     try {
       // Enviamos el código MFA a la API de Laravel
-      const response = await axios.post(
-        'http://localhost:8000/api/verify-mfa',
-        { otp: mfaCode }, // Asegúrate de usar el nombre correcto de la propiedad ('otp' en lugar de 'code')
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await verifyMFA(mfaCode);
 
       // Verificar la respuesta
       console.log('API Response:', response.data);

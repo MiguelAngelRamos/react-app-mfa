@@ -3,6 +3,7 @@ import axios from 'axios';
 import QRCodeDisplay from './QRCodeDisplay';
 import { useAuth } from '../context/AuthContext';
 import LogoutButton from './LogoutButton';
+import { getProfile } from '../services/api';
 
 const ProfilePage = () => {
   const [qrCodeUrl, setQrCodeUrl] = useState(null);
@@ -15,9 +16,7 @@ const ProfilePage = () => {
     console.log("Token actual:", token);
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/user-profile', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await getProfile(); // Obtenemos el perfil del usuario
         setUser(response.data.user); // Guardamos la información del usuario (asegúrate que el campo es "user")
       } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -32,13 +31,7 @@ const ProfilePage = () => {
 
   const enableMFA = async () => {
     try {
-      const response = await axios.post(
-        'http://127.0.0.1:8000/api/enable-mfa',
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = enableMFA(); // Llamamos a la función de habilitar MFA en el backend
 
       // Guardamos la URL del código QR recibido
       setQrCodeUrl(response.data.qrCodeUrl);

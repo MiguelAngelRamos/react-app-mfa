@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../services/api';
 
 const LoginForm = () => {
   const { setToken } = useAuth();
@@ -16,10 +17,7 @@ const LoginForm = () => {
     console.log("Logging in...");
     try {
       // Petición de autenticación a la API de Laravel
-      const response = await axios.post('http://localhost:8000/api/login', {
-        email,
-        password,
-      });
+      const response = await login(email, password);
 
       // Revisa la respuesta en la consola
       console.log('API Response:', response.data);
